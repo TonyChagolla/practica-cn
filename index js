@@ -3,22 +3,11 @@ const bodyParser = require('body-parser');
 const methodOverride = require('method-override');
 const mysql = require('mysql');
 //const path = require('path');
-const appController = require('./appController.js')
-var cors = require('cors');
 
 const app = express();
-app.use(cors());
-//const routes =require('./routes/index.js');
-//const usuarios = express.Router();
-
-app.use(bodyParser.urlencoded({extended: false}));
 app.use(bodyParser.json());
-app.use(methodOverride());
-//app.use('/', usuarios);
+//app.use(methodOverride());
 //app.use(express.static(path.join(__dirname, 'public')));
-
-
-
 
 const db = mysql.createConnection({
 	host: 'localhost',
@@ -36,9 +25,8 @@ db.connect((error) => {
 });
 
 app.get('/api/usuario', function(req, res){
-	var sql = "SELECT * FROM usuario LIMIT 10 OFFSET ?";
-	let userNumber = req.body.userNumber;
-	db.query(sql,[userNumber], function(_error, _rows, _cols){
+	var sql = "SELECT * FROM usuario";
+	db.query(sql, function(_error, _rows, _cols){
 		if(_error){
 			res.write(JSON.stringify({
 				error: true,
@@ -46,8 +34,7 @@ app.get('/api/usuario', function(req, res){
 			}));
 			res.end();
 		}else{
-			res.status(200).send(_rows)
-			//res.write(JSON.stringify(_rows));
+			res.write(JSON.stringify(_rows));
 			res.end();
 		}
 	});
@@ -119,19 +106,6 @@ app.post('/api/usuario', function(req, res){
 		}
 	});
 });
-
-/*
-
-usuarios.route('/usuarios')
-.get(userController.getAllUsers)
-.post(userController.addUsers)
-
-usuarios.route('/usuarios/:id')
-.get(userController.getById)
-.delete(userController.deleteUser)
-.put(userController.updateUser)
-
-*/
 
 const server = app.listen(8080, function(){
 	console.log('Success. Server listening in port: ' + server.address().port);
