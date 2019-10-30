@@ -73,7 +73,7 @@ exports.getAllUsers = function(req, resp){
 	    return
 	  }
 	  console.log(`statusCode: ${res.statusCode}`)
-	  console.log(body)
+	  //console.log(body)
 	  resp.status(200).send(body);
 
 	});
